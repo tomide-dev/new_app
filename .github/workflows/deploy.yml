@@ -40,6 +40,7 @@ jobs:
           script: |
             cd /var/www/newapp/new_app
             git pull origin main
-            source venv/bin/activate
-            pip install -r requirements.txt
-            sudo systemctl restart new_app
+            docker stop new_app-container || true
+            docker rm new_app-container || true
+            docker build -t new_app .
+            docker run -d -p 3100:3000 --name new_app-container new_app
